@@ -3,6 +3,7 @@ package uk.co.alexknight.aoc2021
 import scala.io.Source
 
 object Day1_1 extends App {
+  // Load file & convert to an array of integers 
   val baseFile: Seq[Int] = Source
     .fromResource("depth.txt")
     .getLines
