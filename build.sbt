@@ -7,7 +7,10 @@ ThisBuild / organizationName := "alexknight"
 lazy val root = (project in file("."))
   .settings(
     name := "advent-of-code-2021",
-    libraryDependencies += scalaTest % Test
+    libraryDependencies ++= Seq(
+      scalaTest % Test,
+
+    )
   ).aggregate(day_1)
 
 lazy val day_1 = (project in file("day1-1"))
