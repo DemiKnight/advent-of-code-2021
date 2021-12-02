@@ -20,3 +20,6 @@ lazy val day_1 = (project in file("day1-1"))
 
 lazy val day_2 = (project in file("day2"))
   .settings(name := "day2")
+
+lazy val day_3 = (project in file("day3"))
+  .settings(name := "day3")
