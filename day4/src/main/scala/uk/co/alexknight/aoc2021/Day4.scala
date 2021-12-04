@@ -1,12 +1,12 @@
 package uk.co.alexknight.aoc2021
 
 import scala.io.Source
-import scala.util.{Try, Using}
-
 import scala.language.implicitConversions
+import scala.util.Using
 
 object Day4 extends App {
   type BingoCard = Seq[Seq[Int]]
+
   case class WinningCard(card: Option[BingoCard] = None, winningNumbs: Seq[Int] = Seq.empty)
 
   case class BingoCardFinder(outstandingCards: Seq[BingoCard], foundCards: Seq[BingoCard] = Nil, winningNums: Seq[Int] = Nil)
@@ -27,7 +27,7 @@ object Day4 extends App {
   }
 
   def getScore(board: BingoCard, numbers: Seq[Int]): Int = {
-    val flatBoardSum = board.foldLeft(Seq.empty[Int])((acc,value) => acc ++ value).diff(numbers).sum
+    val flatBoardSum = board.foldLeft(Seq.empty[Int])((acc, value) => acc ++ value).diff(numbers).sum
     numbers.last * flatBoardSum
   }
 
@@ -45,8 +45,8 @@ object Day4 extends App {
     }
   ).toSeq
 
-  val result1Mirror: BingoCardFinder = numberCalls.foldLeft(BingoCardFinder(bingoCards)){ (acc, value) =>
-    if(acc.outstandingCards.isEmpty) {
+  val result1Mirror: BingoCardFinder = numberCalls.foldLeft(BingoCardFinder(bingoCards)) { (acc, value) =>
+    if (acc.outstandingCards.isEmpty) {
       acc
     } else {
       val newNumberCalls: Seq[Int] = acc.winningNums :+ value
@@ -61,7 +61,7 @@ object Day4 extends App {
   }
 
   val result1Card: WinningCard = numberCalls.foldLeft(WinningCard()) { (acc, number: Int) =>
-    if(acc.card.isDefined) {
+    if (acc.card.isDefined) {
       acc
     } else {
       val numSeq = acc.copy(winningNumbs = acc.winningNumbs :+ number)
@@ -71,14 +71,11 @@ object Day4 extends App {
   }
 
   val result1 = result1Card.card.map { card: BingoCard =>
-    val numbers: Seq[Int] = card
-      .foldLeft(Seq.empty[Int])((acc: Seq[Int], value: Seq[Int]) => acc ++ value)
-    val sumOfUnmarked: Int = numbers.diff(result1Card.winningNumbs).sum
-    result1Card.winningNumbs.last * sumOfUnmarked
+    getScore(card, result1Card.winningNumbs)
   }
 
-  println(s"Part1: $result1 ${getScore(result1Card.card.get, result1Card.winningNumbs)}  ${result1Mirror.foundCards.foreach(x => println(x.head.head))}")
+  println(s"Part1: $result1}")
 
   val result2 = 2
-  println(s"Part2:")
+  println(s"Part2: ${getScore(result1Mirror.foundCards.last, result1Mirror.winningNums)}")
 }
