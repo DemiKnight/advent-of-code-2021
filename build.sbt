@@ -11,11 +11,11 @@ lazy val root = (project in file("."))
       scalaTest % Test,
 
     )
-  ).aggregate(day_1)
+  ).aggregate(day_1, day_2, day_3, day_4)
 
 lazy val day_1 = (project in file("day1-1"))
   .settings(
-    name := "day1-1"
+    name := "day1"
   )
 
 lazy val day_2 = (project in file("day2"))
@@ -23,3 +23,5 @@ lazy val day_2 = (project in file("day2"))
 
 lazy val day_3 = (project in file("day3"))
   .settings(name := "day3")
+
+lazy val day_4 = (project in file("day4")).settings(name := "day4")
