@@ -9,7 +9,11 @@ lazy val root = (project in file("."))
     name := "advent-of-code-2021",
     libraryDependencies ++= Seq(
       scalaTest % Test,
-
+    ),
+    scalacOptions ++= Seq(
+      "-Xfatal-warnings",
+      "-deprecation",
+      "-unchecked",
     )
   ).aggregate(day_1, day_2, day_3, day_4)
 
