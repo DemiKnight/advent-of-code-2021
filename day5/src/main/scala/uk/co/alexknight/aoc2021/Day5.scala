@@ -1,18 +1,55 @@
 package uk.co.alexknight.aoc2021
 
+import java.awt.geom.Line2D
 import scala.io.Source
-import scala.util.{Try, Using}
+import scala.util.Using
 
 object Day5 extends App {
   case class Point(x: Int, y: Int)
+
   case class Vector(p1: Point, p2: Point)
 
-  val rawFile: Seq[String] = Using(Source.fromResource("test.txt"))(_.getLines().toSeq).getOrElse(Nil)
+  def materialiseVector(vec: Vector): Seq[Point] = {
+    val yStep = if (vec.p1.y > vec.p2.y) -1 else 1
+    val xStep = if (vec.p1.x > vec.p2.x) -1 else 1
+
+    val yRange = vec.p1.y to vec.p2.y by yStep
+    val xRange = vec.p1.x to vec.p2.x by xStep
+    val test = if(vec.p1.y == vec.p2.y || vec.p1.x == vec.p2.x) {
+      val betweenPoints = for {
+        x <- xRange
+        y <- yRange
+      } yield Point(x,y)
+      (betweenPoints ++ Seq(vec.p1,vec.p2)).distinct
+    } else Nil
+
+
+//    println(s"$vec -> ${test}")
+    test
+  }
+
+  // Load data
+  val rawFile: Seq[String] = Using(Source.fromResource("input.txt"))(_.getLines().toSeq).getOrElse(Nil)
   val vectorList: Seq[Vector] = rawFile.map { line =>
-    val strPoints: Seq[Point] = line.split(" -> ").map(_.split(",").map(_.toInt)).toSeq.map { points =>
-      Point(points.head, points.last)
-    }
+    val strPoints: Seq[Point] = line
+      .split(" -> ")
+      .map(_
+        .split(",")
+        .map(_.toInt))
+      .toSeq
+      .map { points =>
+        Point(points.head, points.last)
+      }
     Vector(strPoints.head, strPoints.last)
   }
-  println(vectorList)
+
+  // Convert to vectors
+  val materialisePoints: Seq[Point] = vectorList.flatMap(materialiseVector)
+  val plottedGraph = materialisePoints.foldLeft(Array.ofDim[Int](1000, 1000)) { (acc, pnt) =>
+    acc(pnt.x)(pnt.y) += 1
+    acc
+  }
+
+  val highPoints = plottedGraph.flatten.filter(_ >= 2).toSeq
+  println(highPoints.length)
 }
