@@ -5,7 +5,6 @@ import scala.util.Using
 
 object Day5 extends App {
   case class Point(x: Int, y: Int)
-
   case class Vector(p1: Point, p2: Point)
 
   def materialiseVector(vec: Vector): Seq[Point] = {
@@ -21,26 +20,21 @@ object Day5 extends App {
       } yield Point(x,y)
       betweenPoints
     } else {
-      for {
-        (xIndex, yIndex) <- yRange.zip(xRange)
-      } yield Point(xIndex, yIndex)
+      yRange.zip(xRange).map { case (yIndex, xIndex) =>
+        Point(xIndex, yIndex)
+      }
     }
     (horizontalLines ++ Seq(vec.p1,vec.p2)).distinct
   }
 
   // Load data
   val rawFile: Seq[String] = Using(Source.fromResource("input.txt"))(_.getLines().toSeq).getOrElse(Nil)
-  val vectorList: Seq[Vector] = rawFile.map { line =>
-    val strPoints: Seq[Point] = line
-      .split(" -> ")
-      .map(_
-        .split(",")
-        .map(_.toInt))
-      .toSeq
-      .map { points =>
-        Point(points.head, points.last)
-      }
-    Vector(strPoints.head, strPoints.last)
+
+  val vectorList = rawFile.map {
+    case s"$xPoint1,$yPoint1 -> $xPoint2,$yPoint2" =>
+      val point1 = Point(xPoint1.toInt, yPoint1.toInt)
+      val point2 = Point(xPoint2.toInt, yPoint2.toInt)
+      Vector(point1,point2)
   }
 
   // Convert to vectors
