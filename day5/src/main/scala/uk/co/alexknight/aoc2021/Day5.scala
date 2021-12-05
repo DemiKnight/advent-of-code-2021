@@ -1,6 +1,5 @@
 package uk.co.alexknight.aoc2021
 
-import java.awt.geom.Line2D
 import scala.io.Source
 import scala.util.Using
 
@@ -15,17 +14,18 @@ object Day5 extends App {
 
     val yRange = vec.p1.y to vec.p2.y by yStep
     val xRange = vec.p1.x to vec.p2.x by xStep
-    val test = if(vec.p1.y == vec.p2.y || vec.p1.x == vec.p2.x) {
+    val horizontalLines = if(vec.p1.y == vec.p2.y || vec.p1.x == vec.p2.x) {
       val betweenPoints = for {
         x <- xRange
         y <- yRange
       } yield Point(x,y)
-      (betweenPoints ++ Seq(vec.p1,vec.p2)).distinct
-    } else Nil
-
-
-//    println(s"$vec -> ${test}")
-    test
+      betweenPoints
+    } else {
+      for {
+        (xIndex, yIndex) <- yRange.zip(xRange)
+      } yield Point(xIndex, yIndex)
+    }
+    (horizontalLines ++ Seq(vec.p1,vec.p2)).distinct
   }
 
   // Load data
