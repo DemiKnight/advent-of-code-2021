@@ -31,3 +31,5 @@ lazy val day_3 = (project in file("day3"))
 lazy val day_4 = (project in file("day4")).settings(name := "day4")
 
 lazy val day_5 = (project in file("day5")).settings(name := "day5")
+
+lazy val day_6 = (project in file("day6")).settings(name := "day6")
